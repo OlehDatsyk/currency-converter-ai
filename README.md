@@ -1,4 +1,4 @@
-# 💱 Exchange Desk — Currency Converter (Web)
+# 💱 Exchange Desk - Currency Converter (Web)
 
 A modern, responsive currency converter built with **Flask**, **HTML5**, **CSS3**, and **vanilla JavaScript**. It has a dark/light glassmorphism UI, live exchange rates, a swap button, and full error handling.
 
@@ -33,7 +33,7 @@ This README is written for someone who has **never run a Python or Flask project
 - **Visual Studio Code** installed (you already have this ✅). If not, download it from https://code.visualstudio.com/ and install it with default options.
 - An internet connection (the app fetches live exchange rates from the web).
 
-You do **not** need to know Python already — every command below is copy-pasteable.
+You do **not** need to know Python already - every command below is copy-pasteable.
 
 ---
 
@@ -107,7 +107,7 @@ git --version
 If you downloaded/unzipped this project already, simply:
 
 1. Open VS Code.
-2. Go to **File → Open Folder…**
+2. Go to **File -> Open Folder…**
 3. Select the `currency-converter-web` folder.
 
 If you are cloning from a Git repository instead:
@@ -126,7 +126,7 @@ The `code .` command opens the current folder in VS Code.
 
 You will run every command in this guide from VS Code's built-in terminal.
 
-- **Menu:** Terminal → New Terminal
+- **Menu:** Terminal -> New Terminal
 - **Keyboard shortcut:** `` Ctrl + ` `` (backtick) on Windows/Linux, `` Cmd + ` `` on macOS
 
 Make sure the terminal's current folder is the project root (`currency-converter-web`). You should see a prompt similar to:
@@ -169,7 +169,7 @@ This creates a new folder called `venv/` inside your project (it's already exclu
 
 You must **activate** the virtual environment every time you open a new terminal to work on this project.
 
-**Windows (PowerShell)** — the default VS Code terminal on Windows:
+**Windows (PowerShell)** - the default VS Code terminal on Windows:
 ```powershell
 venv\Scripts\Activate.ps1
 ```
@@ -190,7 +190,7 @@ source venv/bin/activate
 (venv) PS C:\Users\YourName\currency-converter-web>
 ```
 
-> ⚠️ If PowerShell shows an error like *"running scripts is disabled on this system"*, see the [Common errors](#14-common-errors-and-how-to-fix-them) section below — there's a one-line fix.
+> ⚠️ If PowerShell shows an error like *"running scripts is disabled on this system"*, see the [Common errors](#14-common-errors-and-how-to-fix-them) section below - there's a one-line fix.
 
 ---
 
@@ -237,7 +237,7 @@ cp .env.example .env
 
 ### Get a free exchange rate API key (optional but recommended)
 
-The app works **out of the box without any API key** — it automatically falls back to a free, keyless exchange rate provider. However, for higher reliability and request limits, you can get a free key:
+The app works **out of the box without any API key** - it automatically falls back to a free, keyless exchange rate provider. However, for higher reliability and request limits, you can get a free key:
 
 1. Go to https://www.exchangerate-api.com/
 2. Click **"Get Free Key"**.
@@ -276,7 +276,7 @@ WARNING: This is a development server. Do not use it in a production deployment.
 Press CTRL+C to quit
 ```
 
-Leave this terminal running — it is your live server. To stop the server at any time, press `Ctrl + C` in the terminal.
+Leave this terminal running - it is your live server. To stop the server at any time, press `Ctrl + C` in the terminal.
 
 ---
 
@@ -294,7 +294,7 @@ or
 http://localhost:5000
 ```
 
-You should see the **Exchange Desk** currency converter UI, with dropdowns already populated and a default conversion (1 USD → EUR) calculated automatically.
+You should see the **Exchange Desk** currency converter UI, with dropdowns already populated and a default conversion (1 USD -> EUR) calculated automatically.
 
 Try it out:
 - Change the amount in the "From" box.
@@ -331,7 +331,7 @@ currency-converter-web/
 ```
 
 **Why this structure?**
-- `app.py` stays thin — it only handles HTTP requests/responses and input validation.
+- `app.py` stays thin - it only handles HTTP requests/responses and input validation.
 - `services/` holds business logic (talking to the external exchange rate API), separate from routing. This makes the code easier to test, read, and reuse.
 - `templates/` and `static/` follow Flask's default conventions, so `render_template()` and `url_for('static', ...)` work with zero extra configuration.
 
@@ -342,7 +342,7 @@ currency-converter-web/
 1. The browser loads `/`, which Flask serves using `templates/index.html`.
 2. `static/js/script.js` runs and calls `GET /api/currencies` using the Fetch API to populate both dropdowns.
 3. It then calls `GET /api/convert?from=USD&to=EUR&amount=1` to display an initial conversion.
-4. Whenever you change the amount or a currency, JavaScript waits briefly (debounce) then calls `/api/convert` again via AJAX — no page reload needed.
+4. Whenever you change the amount or a currency, JavaScript waits briefly (debounce) then calls `/api/convert` again via AJAX - no page reload needed.
 5. `app.py` validates the request and calls `services/exchange_service.py`, which:
    - Checks a short-lived in-memory cache first.
    - If no API key is set, or the primary provider fails, automatically falls back to a free public exchange-rate API.
@@ -440,4 +440,4 @@ Once you're comfortable running the app, here are some beginner-friendly ways to
 
 ---
 
-**Enjoy building!** If you run into an issue not covered here, re-read the terminal output carefully — Python and Flask error messages usually tell you exactly which line and file caused the problem.
+**Enjoy building!** If you run into an issue not covered here, re-read the terminal output carefully - Python and Flask error messages usually tell you exactly which line and file caused the problem.
