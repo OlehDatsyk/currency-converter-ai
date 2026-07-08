@@ -1,0 +1,35 @@
+# --- Python ---
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+
+# --- Virtual environments ---
+venv/
+env/
+ENV/
+.venv/
+
+# --- Environment variables (NEVER commit real secrets) ---
+.env
+
+# --- Flask ---
+instance/
+.webassets-cache
+
+# --- VS Code ---
+.vscode/
+*.code-workspace
+
+# --- OS files ---
+.DS_Store
+Thumbs.db
+
+# --- Logs ---
+*.log
+
+# --- Distribution / packaging ---
+build/
+dist/
+*.egg-info/

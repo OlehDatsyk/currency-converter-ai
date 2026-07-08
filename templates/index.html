@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Exchange Desk — Currency Converter</title>
+  <meta name="description" content="A fast, modern currency converter with live exchange rates." />
+
+  <!-- Google Fonts: display serif for the big numbers, sans for UI, mono for data -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}" />
+</head>
+<body>
+
+  <!-- Ambient background grid / glow, purely decorative -->
+  <div class="bg-grid" aria-hidden="true"></div>
+  <div class="bg-glow bg-glow--gold" aria-hidden="true"></div>
+  <div class="bg-glow bg-glow--teal" aria-hidden="true"></div>
+
+  <header class="topbar">
+    <div class="topbar__brand">
+      <span class="topbar__mark">§</span>
+      <span class="topbar__title">Exchange&nbsp;Desk</span>
+    </div>
+
+    <button id="themeToggle" class="theme-toggle" type="button" aria-label="Toggle dark and light mode" aria-pressed="true">
+      <span class="theme-toggle__icon theme-toggle__icon--sun">☀</span>
+      <span class="theme-toggle__icon theme-toggle__icon--moon">☾</span>
+    </button>
+  </header>
+
+  <main class="stage">
+    <section class="intro">
+      <p class="intro__eyebrow">Live mid-market rates</p>
+      <h1 class="intro__headline">Every currency,<br />one clean desk.</h1>
+      <p class="intro__sub">Convert between world currencies instantly, with rates refreshed straight from the market.</p>
+    </section>
+
+    <section class="converter card" aria-label="Currency converter">
+
+      <div class="converter__row">
+        <!-- FROM -->
+        <div class="field" id="fromField">
+          <label class="field__label" for="fromCurrency">From</label>
+          <div class="field__control">
+            <select id="fromCurrency" class="select" aria-label="Convert from currency"></select>
+          </div>
+          <input
+            id="fromAmount"
+            class="amount-input"
+            type="text"
+            inputmode="decimal"
+            autocomplete="off"
+            value="1"
+            aria-label="Amount to convert"
+          />
+        </div>
+
+        <!-- SWAP -->
+        <button id="swapBtn" class="swap-btn" type="button" aria-label="Swap currencies">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" aria-hidden="true">
+            <path d="M7 7h11l-3-3M17 17H6l3 3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
+
+        <!-- TO -->
+        <div class="field" id="toField">
+          <label class="field__label" for="toCurrency">To</label>
+          <div class="field__control">
+            <select id="toCurrency" class="select" aria-label="Convert to currency"></select>
+          </div>
+          <div class="result-display" id="resultDisplay" aria-live="polite">
+            <span class="result-display__value" id="resultValue">0.00</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="converter__meta">
+        <div class="rate-line" id="rateLine">
+          <span class="rate-line__dot" aria-hidden="true"></span>
+          <span id="rateLineText">Fetching latest rate…</span>
+        </div>
+        <button id="convertBtn" class="convert-btn" type="button">
+          <span class="convert-btn__label">Convert</span>
+          <span class="convert-btn__spinner" id="convertSpinner" aria-hidden="true"></span>
+        </button>
+      </div>
+
+      <p class="error-banner" id="errorBanner" role="alert" hidden></p>
+    </section>
+
+    <section class="quick-pairs" aria-label="Popular currency pairs">
+      <p class="quick-pairs__label">Popular</p>
+      <div class="quick-pairs__list" id="quickPairs"></div>
+    </section>
+
+    <footer class="page-footer">
+      <p>Rates are indicative and may differ from bank or card rates. Built with Flask, vanilla JS, and no framework overhead.</p>
+    </footer>
+  </main>
+
+  <!-- Template used by JS to build <option> elements; kept out of JS strings for clarity -->
+  <template id="currencyOptionTemplate">
+    <option></option>
+  </template>
+
+  <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+</body>
+</html>
