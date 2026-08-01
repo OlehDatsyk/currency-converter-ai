@@ -1,112 +1,180 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Exchange Desk — Currency Converter</title>
-  <meta name="description" content="A fast, modern currency converter with live exchange rates." />
-
-  <!-- Google Fonts: display serif for the big numbers, sans for UI, mono for data -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-
-  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}" />
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Ledger &mdash; AI Currency Assistant</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
 <body>
 
-  <!-- Ambient background grid / glow, purely decorative -->
-  <div class="bg-grid" aria-hidden="true"></div>
-  <div class="bg-glow bg-glow--gold" aria-hidden="true"></div>
-  <div class="bg-glow bg-glow--teal" aria-hidden="true"></div>
+<!-- Guilloche-style decorative background pattern (signature motif) -->
+<svg class="bg-weave" viewBox="0 0 1200 800" preserveAspectRatio="none" aria-hidden="true">
+  <defs>
+    <pattern id="weave" width="120" height="120" patternUnits="userSpaceOnUse">
+      <path d="M0,60 Q30,0 60,60 T120,60" fill="none" stroke="currentColor" stroke-width="1"/>
+      <path d="M0,90 Q30,30 60,90 T120,90" fill="none" stroke="currentColor" stroke-width="1"/>
+      <path d="M0,30 Q30,90 60,30 T120,30" fill="none" stroke="currentColor" stroke-width="1"/>
+    </pattern>
+  </defs>
+  <rect width="1200" height="800" fill="url(#weave)"/>
+</svg>
 
-  <header class="topbar">
-    <div class="topbar__brand">
-      <span class="topbar__mark">§</span>
-      <span class="topbar__title">Exchange&nbsp;Desk</span>
+<header class="letterhead">
+  <div class="letterhead__inner">
+    <div class="brand">
+      <span class="brand__mark">§</span>
+      <div class="brand__text">
+        <span class="brand__name">Ledger</span>
+        <span class="brand__tagline">AI Currency Assistant</span>
+      </div>
+    </div>
+    <nav class="header-actions">
+      <span class="status-pill" id="apiStatusPill" title="Backend connectivity">
+        <span class="status-dot"></span> Connecting&hellip;
+      </span>
+      <button id="themeToggle" class="theme-toggle" aria-label="Toggle dark mode" aria-pressed="false">
+        <span class="theme-toggle__icon" aria-hidden="true">&#9789;</span>
+        <span class="theme-toggle__label">Dark mode</span>
+      </button>
+    </nav>
+  </div>
+</header>
+
+<main class="layout">
+
+  <!-- ============ CONVERTER TICKET ============ -->
+  <section class="card ticket" id="converterCard" aria-labelledby="converterHeading">
+    <div class="ticket__perforation" aria-hidden="true"></div>
+    <h1 id="converterHeading" class="card__eyebrow">Exchange Note No. 001</h1>
+    <p class="card__title">Convert currency, instantly</p>
+
+    <form id="convertForm" class="convert-form" autocomplete="off">
+      <div class="field">
+        <label for="amountInput">Amount</label>
+        <input type="number" id="amountInput" min="0" step="any" value="100" required />
+      </div>
+
+      <div class="convert-row">
+        <div class="field">
+          <label for="baseSelect">From</label>
+          <select id="baseSelect" required></select>
+        </div>
+
+        <button type="button" id="swapBtn" class="swap-btn" title="Swap currencies" aria-label="Swap currencies">
+          &#8646;
+        </button>
+
+        <div class="field">
+          <label for="targetSelect">To</label>
+          <select id="targetSelect" required></select>
+        </div>
+      </div>
+
+      <button type="submit" class="btn btn--primary btn--block" id="convertBtn">
+        Convert
+      </button>
+    </form>
+
+    <div class="result" id="resultBox" hidden>
+      <div class="result__figure">
+        <span id="resultAmount" class="ticker">&mdash;</span>
+        <span id="resultCurrency" class="result__currency-code"></span>
+      </div>
+      <div class="result__rate" id="resultRate"></div>
     </div>
 
-    <button id="themeToggle" class="theme-toggle" type="button" aria-label="Toggle dark and light mode" aria-pressed="true">
-      <span class="theme-toggle__icon theme-toggle__icon--sun">☀</span>
-      <span class="theme-toggle__icon theme-toggle__icon--moon">☾</span>
-    </button>
-  </header>
+    <div class="ai-block" id="explanationBlock" hidden>
+      <h2 class="ai-block__label">What this means</h2>
+      <p class="ai-block__text typing-target" id="explanationText"></p>
+    </div>
+  </section>
 
-  <main class="stage">
-    <section class="intro">
-      <p class="intro__eyebrow">Live mid-market rates</p>
-      <h1 class="intro__headline">Every currency,<br />one clean desk.</h1>
-      <p class="intro__sub">Convert between world currencies instantly, with rates refreshed straight from the market.</p>
-    </section>
+  <!-- ============ TREND & HISTORY ============ -->
+  <section class="card" id="trendCard" aria-labelledby="trendHeading">
+    <h2 id="trendHeading" class="card__title card__title--sm">Historical trend</h2>
+    <p class="card__sub">30-day movement between your two selected currencies.</p>
 
-    <section class="converter card" aria-label="Currency converter">
+    <div class="chart-wrap">
+      <svg id="trendChart" viewBox="0 0 600 220" preserveAspectRatio="none" class="trend-chart"></svg>
+      <div class="chart-empty" id="chartEmpty">Convert a currency pair above to see its trend.</div>
+    </div>
 
-      <div class="converter__row">
-        <!-- FROM -->
-        <div class="field" id="fromField">
-          <label class="field__label" for="fromCurrency">From</label>
-          <div class="field__control">
-            <select id="fromCurrency" class="select" aria-label="Convert from currency"></select>
-          </div>
-          <input
-            id="fromAmount"
-            class="amount-input"
-            type="text"
-            inputmode="decimal"
-            autocomplete="off"
-            value="1"
-            aria-label="Amount to convert"
-          />
-        </div>
+    <button class="btn btn--ghost" id="trendBtn" disabled>Summarize trend with AI</button>
 
-        <!-- SWAP -->
-        <button id="swapBtn" class="swap-btn" type="button" aria-label="Swap currencies">
-          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" aria-hidden="true">
-            <path d="M7 7h11l-3-3M17 17H6l3 3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-          </svg>
-        </button>
+    <div class="ai-block" id="trendBlock" hidden>
+      <h3 class="ai-block__label">AI trend summary</h3>
+      <p class="ai-block__text typing-target" id="trendText"></p>
+    </div>
+  </section>
 
-        <!-- TO -->
-        <div class="field" id="toField">
-          <label class="field__label" for="toCurrency">To</label>
-          <div class="field__control">
-            <select id="toCurrency" class="select" aria-label="Convert to currency"></select>
-          </div>
-          <div class="result-display" id="resultDisplay" aria-live="polite">
-            <span class="result-display__value" id="resultValue">0.00</span>
-          </div>
-        </div>
+  <!-- ============ TRAVEL + INVESTMENT ============ -->
+  <section class="card split-card">
+    <div class="split-card__half">
+      <h2 class="card__title card__title--sm">Travel recommendations</h2>
+      <p class="card__sub">Money tips for your trip based on the pair above.</p>
+      <button class="btn btn--ghost" id="travelBtn" disabled>Get travel tips</button>
+      <div class="ai-block" id="travelBlock" hidden>
+        <p class="ai-block__text typing-target" id="travelText"></p>
       </div>
-
-      <div class="converter__meta">
-        <div class="rate-line" id="rateLine">
-          <span class="rate-line__dot" aria-hidden="true"></span>
-          <span id="rateLineText">Fetching latest rate…</span>
-        </div>
-        <button id="convertBtn" class="convert-btn" type="button">
-          <span class="convert-btn__label">Convert</span>
-          <span class="convert-btn__spinner" id="convertSpinner" aria-hidden="true"></span>
-        </button>
+    </div>
+    <div class="divider" aria-hidden="true"></div>
+    <div class="split-card__half">
+      <h2 class="card__title card__title--sm">Investment perspective</h2>
+      <p class="card__sub">General, educational &mdash; not personal advice.</p>
+      <button class="btn btn--ghost" id="investBtn" disabled>Get investment insight</button>
+      <div class="ai-block" id="investBlock" hidden>
+        <p class="ai-block__text typing-target" id="investText"></p>
       </div>
+    </div>
+  </section>
 
-      <p class="error-banner" id="errorBanner" role="alert" hidden></p>
-    </section>
+  <!-- ============ COMPARISON ============ -->
+  <section class="card" id="compareCard" aria-labelledby="compareHeading">
+    <h2 id="compareHeading" class="card__title card__title--sm">Compare currencies</h2>
+    <p class="card__sub">Pick a few currencies to compare against USD.</p>
+    <div class="chip-select" id="chipSelect"></div>
+    <button class="btn btn--ghost" id="compareBtn">Compare selected</button>
 
-    <section class="quick-pairs" aria-label="Popular currency pairs">
-      <p class="quick-pairs__label">Popular</p>
-      <div class="quick-pairs__list" id="quickPairs"></div>
-    </section>
+    <div class="compare-results" id="compareResults" hidden>
+      <table class="compare-table" id="compareTable">
+        <thead><tr><th>Currency</th><th>Rate vs USD</th></tr></thead>
+        <tbody id="compareTableBody"></tbody>
+      </table>
+      <div class="ai-block">
+        <h3 class="ai-block__label">AI comparison</h3>
+        <p class="ai-block__text typing-target" id="compareText"></p>
+      </div>
+    </div>
+  </section>
 
-    <footer class="page-footer">
-      <p>Rates are indicative and may differ from bank or card rates. Built with Flask, vanilla JS, and no framework overhead.</p>
-    </footer>
-  </main>
+  <!-- ============ CHAT / CONVERSATION HISTORY ============ -->
+  <section class="card chat-card" id="chatCard" aria-labelledby="chatHeading">
+    <h2 id="chatHeading" class="card__title card__title--sm">Ask the assistant</h2>
+    <p class="card__sub">Ask anything about currencies, rates, or your trip.</p>
 
-  <!-- Template used by JS to build <option> elements; kept out of JS strings for clarity -->
-  <template id="currencyOptionTemplate">
-    <option></option>
-  </template>
+    <div class="chat-log" id="chatLog" role="log" aria-live="polite">
+      <div class="chat-msg chat-msg--assistant">
+        <span class="chat-msg__bubble">Hi! I'm your currency assistant. Ask me about exchange rates, travel budgeting, or how a currency has been trending.</span>
+      </div>
+    </div>
 
-  <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+    <form id="chatForm" class="chat-form" autocomplete="off">
+      <input type="text" id="chatInput" placeholder="e.g. Is now a good time to convert GBP to JPY?" required />
+      <button type="submit" class="btn btn--primary" id="chatSendBtn">Send</button>
+    </form>
+    <button class="btn btn--text" id="clearHistoryBtn" type="button">Clear conversation</button>
+  </section>
+
+</main>
+
+<footer class="site-footer">
+  <p>Ledger AI Currency Assistant &mdash; rates are informational only, not financial advice.</p>
+</footer>
+
+<script src="{{ url_for('static', filename='js/app.js') }}"></script>
 </body>
 </html>

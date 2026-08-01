@@ -1,443 +1,604 @@
-# 💱 Exchange Desk - Currency Converter (Web)
+# Ledger - AI Currency Assistant
 
-A modern, responsive currency converter built with **Flask**, **HTML5**, **CSS3**, and **vanilla JavaScript**. It has a dark/light glassmorphism UI, live exchange rates, a swap button, and full error handling.
+A full-stack **AI-powered currency converter** built with Python, Flask, an
+LLM (OpenAI or Claude), and a hand-crafted HTML/CSS/JS frontend styled like
+a banknote/ledger. It converts currencies, explains exchange rates in plain
+English, summarizes historical trends, gives travel money tips, offers
+general investment perspective, compares multiple currencies, and includes
+a full chat assistant with conversation history - all with a light/dark
+theme and a responsive, mobile-friendly layout.
 
-This README is written for someone who has **never run a Python or Flask project before** and has only installed Visual Studio Code so far. Follow it top to bottom and you will have the app running locally.
+> **This README assumes you have never set up a Python project before.**
+> It assumes the *only* thing installed on your computer is Visual Studio
+> Code. Follow the steps in order and you will have the app running
+> locally in about 15-20 minutes.
 
 ---
 
 ## Table of contents
 
-1. [What you need before you start](#1-what-you-need-before-you-start)
-2. [Install Python](#2-install-python)
-3. [Install Git (optional but recommended)](#3-install-git-optional-but-recommended)
-4. [Get the project into VS Code](#4-get-the-project-into-vs-code)
-5. [Open the integrated terminal in VS Code](#5-open-the-integrated-terminal-in-vs-code)
-6. [Create a virtual environment](#6-create-a-virtual-environment)
-7. [Activate the virtual environment](#7-activate-the-virtual-environment)
-8. [Install project dependencies](#8-install-project-dependencies)
-9. [Set up your .env file and API key](#9-set-up-your-env-file-and-api-key)
-10. [Run the Flask application](#10-run-the-flask-application)
-11. [Open the app in your browser](#11-open-the-app-in-your-browser)
-12. [Project folder structure explained](#12-project-folder-structure-explained)
-13. [How the app works (high level)](#13-how-the-app-works-high-level)
-14. [Common errors and how to fix them](#14-common-errors-and-how-to-fix-them)
-15. [Useful VS Code terminal commands cheat sheet](#15-useful-vs-code-terminal-commands-cheat-sheet)
-16. [Next steps / ideas to extend the project](#16-next-steps--ideas-to-extend-the-project)
+1. [What you're building](#1-what-youre-building)
+2. [Project folder structure](#2-project-folder-structure)
+3. [Step 1 - Install Python](#3-step-1--install-python)
+4. [Step 2 - Install Git (optional but recommended)](#4-step-2--install-git-optional-but-recommended)
+5. [Step 3 - Get the project into VS Code](#5-step-3--get-the-project-into-vs-code)
+6. [Step 4 - Create a virtual environment](#6-step-4--create-a-virtual-environment)
+7. [Step 5 - Activate the virtual environment](#7-step-5--activate-the-virtual-environment)
+8. [Step 6 - Install dependencies](#8-step-6--install-dependencies)
+9. [Step 7 - Get your API keys](#9-step-7--get-your-api-keys)
+10. [Step 8 - Create your .env file](#10-step-8--create-your-env-file)
+11. [Step 9 - Run the application](#11-step-9--run-the-application)
+12. [Step 10 - Use the app](#12-step-10--use-the-app)
+13. [Common errors & how to fix them](#13-common-errors--how-to-fix-them)
+14. [How the project is organized (folder-by-folder)](#14-how-the-project-is-organized-folder-by-folder)
+15. [API endpoints reference](#15-api-endpoints-reference)
+16. [Deployment guide](#16-deployment-guide)
+17. [Future improvements](#17-future-improvements)
+18. [License](#18-license)
 
 ---
 
-## 1. What you need before you start
+## 1. What you're building
 
-- A computer running **Windows**, **macOS**, or **Linux**.
-- **Visual Studio Code** installed (you already have this ✅). If not, download it from https://code.visualstudio.com/ and install it with default options.
-- An internet connection (the app fetches live exchange rates from the web).
+A Flask web server (`app.py`) serves one page (`templates/index.html`).
+That page calls small JSON APIs on the same server, which in turn:
 
-You do **not** need to know Python already - every command below is copy-pasteable.
+- Fetch live/historical exchange rates from a currency API.
+- Send prompts to an AI model (OpenAI GPT or Anthropic Claude) to generate
+  human-friendly explanations, trend summaries, travel tips, investment
+  perspective, currency comparisons, and free-form chat answers.
 
----
-
-## 2. Install Python
-
-Flask is a Python framework, so you need Python installed on your computer first.
-
-### Check if Python is already installed
-
-Open a terminal (see [section 5](#5-open-the-integrated-terminal-in-vs-code) if you're not sure how) and run:
-
-```bash
-python --version
 ```
-
-or, on macOS/Linux, sometimes:
-
-```bash
-python3 --version
-```
-
-- If you see something like `Python 3.11.4`, Python is already installed. Make sure the version is **3.9 or higher**, then skip to [section 3](#3-install-git-optional-but-recommended).
-- If you see an error like `command not found` or `'python' is not recognized`, follow the install steps below.
-
-### Windows
-
-1. Go to https://www.python.org/downloads/
-2. Click the yellow **"Download Python 3.x.x"** button.
-3. Run the installer.
-4. ⚠️ **Very important:** On the first installer screen, check the box **"Add python.exe to PATH"** at the bottom before clicking "Install Now".
-5. Once installation finishes, close and reopen VS Code completely.
-6. Verify by running `python --version` in a new terminal.
-
-### macOS
-
-1. Go to https://www.python.org/downloads/ and download the macOS installer.
-2. Run the `.pkg` installer and follow the prompts.
-3. Close and reopen VS Code.
-4. Verify with `python3 --version`.
-
-*(Alternative for macOS users who have Homebrew: `brew install python`)*
-
-### Linux (Debian/Ubuntu example)
-
-```bash
-sudo apt update
-sudo apt install python3 python3-venv python3-pip
-```
-
-Verify with `python3 --version`.
-
----
-
-## 3. Install Git (optional but recommended)
-
-Git lets you download (clone) and version-control the project. If you already have the project files on your computer (e.g., unzipped into a folder), you can **skip this step**.
-
-- Windows/macOS: download from https://git-scm.com/downloads and install with default options.
-- Linux: `sudo apt install git`
-
-Verify installation:
-
-```bash
-git --version
+Browser (HTML/CSS/JS)
+        │  fetch() calls
+        ▼
+Flask app (app.py)
+        │
+        ├── services/currency_service.py  ->  Currency exchange rate API
+        └── services/ai_service.py        ->  OpenAI API or Claude API
 ```
 
 ---
 
-## 4. Get the project into VS Code
+## 2. Project folder structure
 
-If you downloaded/unzipped this project already, simply:
+```
+currency-ai-assistant/
+│
+├── app.py                     # Flask entry point - defines all routes
+├── config.py                  # Loads settings & API keys from .env
+├── requirements.txt           # List of Python packages this project needs
+├── .env.example                # Template for your secret keys (copy -> .env)
+├── .env                        # YOUR real secrets (you create this, never commit it)
+├── .gitignore                  # Tells Git which files to ignore (like .env)
+├── Procfile                    # Used by some deployment platforms (Heroku/Render)
+├── README.md                   # This file
+│
+├── services/                   # "Business logic" - talks to external APIs
+│   ├── __init__.py
+│   ├── currency_service.py     # Currency conversion + historical rates
+│   └── ai_service.py           # All OpenAI/Claude prompt logic
+│
+├── utils/                       # Small reusable helper functions
+│   ├── __init__.py
+│   └── helpers.py
+│
+├── templates/                   # HTML files Flask renders
+│   └── index.html               # The single-page frontend
+│
+└── static/                      # CSS, JS, images served as-is
+    ├── css/
+    │   └── style.css            # All styling (light + dark theme)
+    ├── js/
+    │   └── app.js                # All frontend behavior
+    └── img/                       # (empty - add your own images/icons here)
+```
+
+---
+
+## 3. Step 1 - Install Python
+
+The app is written in Python, so your computer needs a Python interpreter
+installed. VS Code alone does **not** include Python.
+
+1. Go to **https://www.python.org/downloads/** in your web browser.
+2. Click the big **"Download Python 3.x.x"** button (any version 3.10 or
+   newer works fine).
+3. Run the installer you downloaded.
+   - **Windows:** On the very first installer screen, **check the box that
+     says "Add python.exe to PATH"** before clicking "Install Now". This
+     step is the #1 thing beginners forget, and skipping it causes the
+     `'python' is not recognized` error later.
+   - **macOS:** Run the `.pkg` installer and click through with the default
+     options.
+4. Verify the install. Open VS Code, then open its built-in terminal:
+   - Menu bar -> **Terminal -> New Terminal** (or press `` Ctrl+` ``).
+5. In the terminal that opens at the bottom of VS Code, type:
+
+   ```bash
+   python --version
+   ```
+
+   or, on macOS/Linux, if that doesn't work, try:
+
+   ```bash
+   python3 --version
+   ```
+
+   You should see something like:
+
+   ```
+   Python 3.12.4
+   ```
+
+   If you see a version number, Python is installed correctly. If you get
+   an error, see the [Troubleshooting](#13-common-errors--how-to-fix-them)
+   section below.
+
+6. **Recommended:** In VS Code, install the official **Python extension**
+   (by Microsoft) from the Extensions panel on the left sidebar
+   (icon looks like 4 squares). Search "Python" and click **Install**.
+   This gives you IntelliSense, debugging, and automatic virtual
+   environment detection.
+
+---
+
+## 4. Step 2 - Install Git (optional but recommended)
+
+Git lets you download (clone) this project and track changes. If you
+already have the project folder on your computer (e.g. downloaded as a
+ZIP), you can **skip this step**.
+
+1. Go to **https://git-scm.com/downloads** and download the installer for
+   your operating system.
+2. Run the installer, accepting all the default options.
+3. Verify it worked - in the VS Code terminal, type:
+
+   ```bash
+   git --version
+   ```
+
+   You should see something like `git version 2.45.1`.
+
+---
+
+## 5. Step 3 - Get the project into VS Code
+
+**If you already have the `currency-ai-assistant` folder** (for example,
+you downloaded/unzipped it, or a teammate sent it to you):
 
 1. Open VS Code.
-2. Go to **File -> Open Folder…**
-3. Select the `currency-converter-web` folder.
+2. Go to **File -> Open Folder...**
+3. Select the `currency-ai-assistant` folder and click **Select Folder**.
 
-If you are cloning from a Git repository instead:
+**If you're starting from a Git repository:**
 
-```bash
-git clone <your-repository-url>
-cd currency-converter-web
-code .
-```
+1. Open VS Code.
+2. Press `` Ctrl+` `` (or `` Cmd+` `` on Mac) to open the terminal.
+3. Run:
 
-The `code .` command opens the current folder in VS Code.
+   ```bash
+   git clone <your-repository-url>
+   cd currency-ai-assistant
+   code .
+   ```
 
----
+   The last command (`code .`) reopens VS Code inside that folder.
 
-## 5. Open the integrated terminal in VS Code
-
-You will run every command in this guide from VS Code's built-in terminal.
-
-- **Menu:** Terminal -> New Terminal
-- **Keyboard shortcut:** `` Ctrl + ` `` (backtick) on Windows/Linux, `` Cmd + ` `` on macOS
-
-Make sure the terminal's current folder is the project root (`currency-converter-web`). You should see a prompt similar to:
-
-```
-PS C:\Users\YourName\currency-converter-web>
-```
-
-or on macOS/Linux:
-
-```
-yourname@machine currency-converter-web %
-```
-
-If it's not in the right folder, run `cd path/to/currency-converter-web`.
+Either way, you should end up with the file structure from
+[section 2](#2-project-folder-structure) visible in the VS Code Explorer
+panel on the left.
 
 ---
 
-## 6. Create a virtual environment
+## 6. Step 4 - Create a virtual environment
 
-A **virtual environment** is an isolated Python installation just for this project, so its dependencies don't clash with other projects on your computer. This is standard professional practice.
+A **virtual environment** is an isolated, private copy of Python just for
+this project, so the packages you install don't clash with other Python
+projects on your computer. Think of it as a clean sandbox.
 
-In the VS Code terminal, from the project root, run:
+Open the VS Code terminal (`` Ctrl+` ``) and make sure you're inside the
+`currency-ai-assistant` folder (the prompt should show that folder name).
+Then run:
 
 **Windows:**
 ```bash
 python -m venv venv
 ```
 
-**macOS/Linux:**
+**macOS / Linux:**
 ```bash
 python3 -m venv venv
 ```
 
-This creates a new folder called `venv/` inside your project (it's already excluded from Git via `.gitignore`).
+This creates a new folder called `venv/` inside your project. This is
+where the isolated Python install and packages will live. You'll see it
+appear in the VS Code Explorer sidebar - you can ignore its contents.
+
+> 💡 The `.gitignore` file already tells Git to ignore the `venv/` folder,
+> so it won't get uploaded if you push this project to GitHub.
 
 ---
 
-## 7. Activate the virtual environment
+## 7. Step 5 - Activate the virtual environment
 
-You must **activate** the virtual environment every time you open a new terminal to work on this project.
+Creating the virtual environment isn't enough - you must **activate** it
+every time you open a new terminal to work on this project.
 
-**Windows (PowerShell)** - the default VS Code terminal on Windows:
+**Windows (Command Prompt or PowerShell, via VS Code terminal):**
+```bash
+venv\Scripts\activate
+```
+
+If PowerShell blocks the script with an error about "execution policies",
+run this once, then try activating again:
 ```powershell
-venv\Scripts\Activate.ps1
+Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
 ```
 
-**Windows (Command Prompt / cmd.exe):**
-```cmd
-venv\Scripts\activate.bat
-```
-
-**macOS/Linux (bash/zsh):**
+**macOS / Linux:**
 ```bash
 source venv/bin/activate
 ```
 
-✅ **You'll know it worked** when you see `(venv)` at the start of your terminal prompt, like this:
+✅ **How to know it worked:** your terminal prompt will now show `(venv)`
+at the beginning, like this:
 
 ```
-(venv) PS C:\Users\YourName\currency-converter-web>
+(venv) C:\Users\you\currency-ai-assistant>
+```
+or
+```
+(venv) you@mac currency-ai-assistant %
 ```
 
-> ⚠️ If PowerShell shows an error like *"running scripts is disabled on this system"*, see the [Common errors](#14-common-errors-and-how-to-fix-them) section below - there's a one-line fix.
+From now on, every `pip install` and `python` command you run in this
+terminal uses the isolated environment, not your system-wide Python.
+
+> ⚠️ You must re-activate the virtual environment every time you close and
+> reopen VS Code (or open a brand-new terminal tab). If commands start
+> failing with "module not found" errors, the first thing to check is
+> whether `(venv)` is showing in your prompt.
+
+In VS Code, you can also select the interpreter permanently: press
+`Ctrl+Shift+P` -> type **"Python: Select Interpreter"** -> choose the one
+that shows `./venv/...`. VS Code will then auto-activate it in new
+terminals.
 
 ---
 
-## 8. Install project dependencies
+## 8. Step 6 - Install dependencies
 
-With the virtual environment **activated**, install all required Python packages listed in `requirements.txt`:
+With `(venv)` active, install every package this project needs in one
+command:
 
 ```bash
 pip install -r requirements.txt
 ```
 
-Expected terminal output (abbreviated):
+This reads `requirements.txt` and installs:
+
+| Package | What it's for |
+|---|---|
+| `Flask` | The web server framework |
+| `python-dotenv` | Loads your `.env` secrets into the app |
+| `requests` | Makes HTTP calls to the currency exchange API |
+| `openai` | Official OpenAI Python SDK (for AI explanations) |
+| `anthropic` | Official Anthropic (Claude) Python SDK - alternative AI provider |
+| `gunicorn` | Production web server, used only when you deploy |
+
+You'll see a lot of text scroll by ending in something like:
 
 ```
-Collecting Flask==3.0.3
-  Downloading flask-3.0.3-py3-none-any.whl (101 kB)
-Collecting requests==2.32.3
-  Downloading requests-2.32.3-py3-none-any.whl (64 kB)
-Collecting python-dotenv==1.0.1
-  Downloading python_dotenv-1.0.1-py3-none-any.whl (19 kB)
-...
-Successfully installed Flask-3.0.3 requests-2.32.3 python-dotenv-1.0.1 ...
+Successfully installed Flask-3.0.3 anthropic-0.34.2 openai-1.51.2 ...
 ```
 
-If this finishes without red error text, you're ready for the next step.
+That means it worked.
 
 ---
 
-## 9. Set up your .env file and API key
+## 9. Step 7 - Get your API keys
 
-The app reads configuration (like your API key) from a file named `.env`. A template is provided as `.env.example`.
+This app needs **two** kinds of API keys:
 
-### Create your `.env` file
+### A) An AI provider key - pick ONE
 
-**Windows (PowerShell):**
-```powershell
-Copy-Item .env.example .env
-```
+**Option 1: OpenAI (default)**
+1. Go to **https://platform.openai.com/signup** and create an account
+   (or log in).
+2. Go to **https://platform.openai.com/api-keys**.
+3. Click **"Create new secret key"**, give it a name, click **Create**.
+4. **Copy the key immediately** - it starts with `sk-` and is only shown
+   once.
+5. Note: OpenAI requires billing to be set up (a card on file) even for
+   small usage - check their pricing page. New accounts often include a
+   small free trial credit.
 
-**macOS/Linux:**
-```bash
-cp .env.example .env
-```
+**Option 2: Anthropic Claude (alternative)**
+1. Go to **https://console.anthropic.com/** and create an account.
+2. Navigate to **Settings -> API Keys**.
+3. Click **"Create Key"**, name it, and copy the value (starts with
+   `sk-ant-`).
+4. If you choose this option, set `AI_PROVIDER=claude` in your `.env` file
+   (see next step).
 
-### Get a free exchange rate API key (optional but recommended)
+### B) A currency exchange rate API key (optional but recommended)
 
-The app works **out of the box without any API key** - it automatically falls back to a free, keyless exchange rate provider. However, for higher reliability and request limits, you can get a free key:
+1. Go to **https://www.exchangerate-api.com/** and click **"Get Free Key"**.
+2. Sign up with your email, verify it, and copy your API key from the
+   dashboard.
+3. The free tier is generous (1,500 requests/month) and perfect for local
+   development and small projects.
 
-1. Go to https://www.exchangerate-api.com/
-2. Click **"Get Free Key"**.
-3. Sign up with your email and verify your account.
-4. Copy the API key shown on your dashboard.
-5. Open `.env` in VS Code and paste it in:
-
-```
-EXCHANGE_RATE_API_KEY=paste_your_key_here
-```
-
-6. Save the file (`Ctrl+S` / `Cmd+S`).
-
-> 🔒 **Never share or commit your `.env` file.** It's already listed in `.gitignore` so Git will ignore it automatically.
+> 🆓 **Don't want to sign up for anything yet?** You can leave
+> `EXCHANGE_RATE_API_KEY` blank in your `.env` file. The app automatically
+> falls back to the free, keyless **Frankfurter API**
+> (https://www.frankfurter.app/) for live rates and history. This is
+> great for a first test run, but the paid key gives you more currencies
+> and higher reliability.
 
 ---
 
-## 10. Run the Flask application
+## 10. Step 8 - Create your .env file
 
-With your virtual environment still **activated** (you should see `(venv)` in the prompt), run:
+Your API keys must **never** be typed directly into the code - they go in
+a special file called `.env` that stays private on your machine.
+
+1. In the VS Code Explorer, find the file **`.env.example`**.
+2. Duplicate it and rename the copy to exactly **`.env`** (no ".example").
+   - Easiest way: in the VS Code terminal, run:
+     - Windows: `copy .env.example .env`
+     - macOS/Linux: `cp .env.example .env`
+3. Open the new `.env` file and fill in your real values:
+
+   ```dotenv
+   FLASK_SECRET_KEY=any-random-string-you-like
+   FLASK_DEBUG=True
+
+   AI_PROVIDER=openai
+
+   OPENAI_API_KEY=sk-your-real-key-here
+   OPENAI_MODEL=gpt-4o-mini
+
+   ANTHROPIC_API_KEY=
+   ANTHROPIC_MODEL=claude-sonnet-5
+
+   EXCHANGE_RATE_API_KEY=your-real-key-here-or-leave-blank
+   ```
+
+4. Save the file (`Ctrl+S` / `Cmd+S`).
+
+> 🔒 **Security note:** `.env` is listed in `.gitignore`, so if you ever
+> push this project to GitHub, your secrets stay on your computer and are
+> never uploaded. Never remove `.env` from `.gitignore`, and never paste
+> your real keys into a chat, issue, or screenshot you plan to share.
+
+---
+
+## 11. Step 9 - Run the application
+
+With your virtual environment active (`(venv)` visible in the prompt) and
+your `.env` file filled in, start the Flask server:
 
 ```bash
 python app.py
 ```
 
-Expected terminal output:
+(On macOS/Linux, use `python3 app.py` if `python` isn't recognized.)
+
+You should see terminal output similar to this:
 
 ```
-2026-07-08 12:00:01 [INFO] currency-converter: Starting Currency Converter on http://127.0.0.1:5000
  * Serving Flask app 'app'
  * Debug mode: on
 WARNING: This is a development server. Do not use it in a production deployment.
  * Running on all addresses (0.0.0.0)
  * Running on http://127.0.0.1:5000
- * Running on http://192.168.x.x:5000
+ * Running on http://192.168.1.23:5000
 Press CTRL+C to quit
+ * Restarting with stat
+ * Debugger is active!
+ * Debugger PIN: 123-456-789
 ```
 
-Leave this terminal running - it is your live server. To stop the server at any time, press `Ctrl + C` in the terminal.
+That `Running on http://127.0.0.1:5000` line is the important one.
 
 ---
 
-## 11. Open the app in your browser
+## 12. Step 10 - Use the app
 
-Open your web browser and go to:
-
-```
-http://127.0.0.1:5000
-```
-
-or
-
-```
-http://localhost:5000
-```
-
-You should see the **Exchange Desk** currency converter UI, with dropdowns already populated and a default conversion (1 USD -> EUR) calculated automatically.
-
-Try it out:
-- Change the amount in the "From" box.
-- Change either currency dropdown.
-- Click the circular swap button to flip currencies.
-- Click the sun/moon toggle in the top right to switch between dark and light mode.
+1. Hold `Ctrl` (or `Cmd` on Mac) and click the
+   `http://127.0.0.1:5000` link in the terminal - or just open your web
+   browser and manually go to **http://127.0.0.1:5000**.
+2. You should see the "Ledger - AI Currency Assistant" interface load.
+3. Try it out:
+   - Enter an amount, pick two currencies, click **Convert**.
+   - Click **Summarize trend with AI**, **Get travel tips**, **Get
+     investment insight**.
+   - Select a few chips in the "Compare currencies" section and click
+     **Compare selected**.
+   - Type a question in the chat box at the bottom.
+   - Click the **Dark mode** toggle in the top-right corner.
+4. To stop the server, click back into the VS Code terminal and press
+   `Ctrl+C`.
 
 ---
 
-## 12. Project folder structure explained
+## 13. Common errors & how to fix them
 
-```
-currency-converter-web/
-│
-├── app.py                     # Flask app: defines web routes (/) and API routes (/api/...)
-│
-├── services/
-│   ├── __init__.py            # Marks this folder as a Python package
-│   └── exchange_service.py    # All exchange-rate fetching/caching/conversion logic
-│
-├── templates/
-│   └── index.html             # The single HTML page (Jinja2 template rendered by Flask)
-│
-├── static/
-│   ├── css/
-│   │   └── style.css          # All styling: theme, glassmorphism, layout, animations
-│   └── js/
-│       └── script.js          # Frontend logic: fetch calls, dropdowns, swap, theming
-│
-├── requirements.txt           # Exact Python package versions this project needs
-├── .env.example                # Template for environment variables (copy to .env)
-├── .gitignore                  # Files/folders Git should ignore (venv, .env, caches...)
-└── README.md                   # This file
-```
-
-**Why this structure?**
-- `app.py` stays thin - it only handles HTTP requests/responses and input validation.
-- `services/` holds business logic (talking to the external exchange rate API), separate from routing. This makes the code easier to test, read, and reuse.
-- `templates/` and `static/` follow Flask's default conventions, so `render_template()` and `url_for('static', ...)` work with zero extra configuration.
-
----
-
-## 13. How the app works (high level)
-
-1. The browser loads `/`, which Flask serves using `templates/index.html`.
-2. `static/js/script.js` runs and calls `GET /api/currencies` using the Fetch API to populate both dropdowns.
-3. It then calls `GET /api/convert?from=USD&to=EUR&amount=1` to display an initial conversion.
-4. Whenever you change the amount or a currency, JavaScript waits briefly (debounce) then calls `/api/convert` again via AJAX - no page reload needed.
-5. `app.py` validates the request and calls `services/exchange_service.py`, which:
-   - Checks a short-lived in-memory cache first.
-   - If no API key is set, or the primary provider fails, automatically falls back to a free public exchange-rate API.
-   - Returns the conversion rate and result as JSON.
-6. The JavaScript animates the new result into view and updates the small "1 USD = 0.92 EUR" rate line.
-
----
-
-## 14. Common errors and how to fix them
-
-### ❌ `'python' is not recognized as an internal or external command`
-**Cause:** Python isn't installed, or wasn't added to PATH.
-**Fix:** Reinstall Python and make sure to check **"Add python.exe to PATH"** during setup (Windows). Restart VS Code afterwards.
-
----
-
-### ❌ PowerShell: `venv\Scripts\Activate.ps1 cannot be loaded because running scripts is disabled on this system`
-**Cause:** Windows PowerShell blocks script execution by default.
-**Fix:** Run this once in the same terminal, then try activating again:
-```powershell
-Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy RemoteSigned
-```
-Type `Y` and press Enter when prompted, then re-run `venv\Scripts\Activate.ps1`.
-
----
-
-### ❌ `ModuleNotFoundError: No module named 'flask'`
-**Cause:** Either the virtual environment isn't activated, or dependencies weren't installed.
-**Fix:**
-1. Make sure you see `(venv)` in your terminal prompt. If not, activate it (see [section 7](#7-activate-the-virtual-environment)).
-2. Run `pip install -r requirements.txt` again.
-
----
-
-### ❌ `Address already in use` / `OSError: [Errno 48] Address already in use`
-**Cause:** Something else (maybe a previous run of this app) is already using port 5000.
-**Fix:** Either stop the other process, or run this app on a different port by editing `.env`:
-```
-PORT=5001
-```
-Then restart with `python app.py` and visit `http://127.0.0.1:5001`.
-
----
-
-### ❌ Browser shows "Could not load the currency list" or "Rate unavailable"
-**Cause:** No internet connection, or the exchange rate API is temporarily down/rate-limited.
-**Fix:**
-1. Check your internet connection.
-2. Wait a minute and try again (the free fallback API has rate limits).
-3. If you added an API key in `.env`, double-check it was copied correctly and that you restarted `python app.py` after editing `.env` (environment variables are only read on startup).
-
----
-
-### ❌ `pip: command not found` (macOS/Linux)
-**Fix:** Use `pip3` instead of `pip`, or make sure your virtual environment is activated (it provides its own `pip`).
-
----
-
-### ❌ Changes to CSS/JS don't seem to appear in the browser
-**Cause:** Browser caching.
-**Fix:** Hard-refresh the page: `Ctrl + Shift + R` (Windows/Linux) or `Cmd + Shift + R` (macOS).
-
----
-
-### ❌ `SyntaxError` when running `python app.py`
-**Cause:** Usually an outdated Python version.
-**Fix:** Confirm you're running Python 3.9+ with `python --version`. Reinstall a newer version if needed (see [section 2](#2-install-python)).
-
----
-
-## 15. Useful VS Code terminal commands cheat sheet
-
-| Task | Windows (PowerShell) | macOS / Linux |
+| Error message | What it means | How to fix it |
 |---|---|---|
-| Check Python version | `python --version` | `python3 --version` |
-| Create virtual environment | `python -m venv venv` | `python3 -m venv venv` |
-| Activate virtual environment | `venv\Scripts\Activate.ps1` | `source venv/bin/activate` |
-| Deactivate virtual environment | `deactivate` | `deactivate` |
-| Install dependencies | `pip install -r requirements.txt` | `pip install -r requirements.txt` |
-| Run the app | `python app.py` | `python3 app.py` |
-| Stop the app | `Ctrl + C` | `Ctrl + C` |
-| Copy env template | `Copy-Item .env.example .env` | `cp .env.example .env` |
+| `'python' is not recognized as an internal or external command` | Python isn't on your system PATH. | Reinstall Python and check **"Add python.exe to PATH"** during setup (Windows), or use `python3` instead of `python` (macOS/Linux). |
+| `ModuleNotFoundError: No module named 'flask'` | Dependencies aren't installed, or your virtual environment isn't active. | Make sure `(venv)` shows in your terminal prompt, then re-run `pip install -r requirements.txt`. |
+| `pip: command not found` | Same root cause as above - Python/pip isn't installed or on PATH. | Reinstall Python (see Step 1); pip is bundled with modern Python installers. |
+| Terminal shows no `(venv)` prefix after activating | The activation command didn't run, or you're in the wrong folder. | Make sure you're inside the `currency-ai-assistant` folder, then re-run the activation command from [Step 5](#7-step-5--activate-the-virtual-environment). |
+| PowerShell: `venv\Scripts\activate` **is not digitally signed / cannot be loaded** | Windows PowerShell's execution policy blocks scripts by default. | Run `Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser`, then try again. |
+| `AIServiceError: OPENAI_API_KEY is missing` (shown in the browser) | Your `.env` file wasn't created, is misnamed, or the key field is empty. | Confirm the file is named exactly `.env` (not `.env.example` or `.env.txt`), sits in the project root, and has your real key pasted in. Restart the server after editing `.env`. |
+| `AIServiceError: AI provider request failed: Error code: 401` | Your API key is invalid, expired, or has no billing set up. | Double-check you copied the whole key with no extra spaces, and that your OpenAI/Anthropic account has billing configured. |
+| Conversion works but "explanation unavailable" / AI sections error out | The currency conversion succeeded but the AI call failed (bad key, no internet, rate limit). | Check the terminal output for the specific error; verify your API key and internet connection. |
+| `CurrencyServiceError: Could not fetch...` | The currency API is unreachable, or your `EXCHANGE_RATE_API_KEY` is invalid. | Leave `EXCHANGE_RATE_API_KEY` blank to use the free Frankfurter fallback, or verify your key at exchangerate-api.com. |
+| Browser shows "This site can't be reached" at 127.0.0.1:5000 | The Flask server isn't running, or it crashed. | Check the VS Code terminal for error text; make sure `python app.py` is still running and didn't exit. |
+| Port `5000` already in use | Another program (or a previous run of this app) is using port 5000. | Stop the other process, or change the port in `app.py`'s last line, e.g. `app.run(port=5001)`, then visit `http://127.0.0.1:5001`. On macOS, AirPlay Receiver sometimes uses 5000 - disable it in System Settings -> General -> AirDrop & Handoff, or just change the port. |
+| Changes to `style.css` / `app.js` don't show up in the browser | Your browser cached the old file. | Hard-refresh with `Ctrl+Shift+R` (Windows/Linux) or `Cmd+Shift+R` (Mac). |
+| `UnicodeDecodeError` or garbled terminal symbols on Windows | Rare console encoding issue. | Run `chcp 65001` in the terminal before starting the app, or use the VS Code integrated terminal instead of an external one. |
+
+If you hit an error not listed here, copy the **exact** error text from
+the terminal and search for it - the specific wording almost always
+points straight to the fix.
 
 ---
 
-## 16. Next steps / ideas to extend the project
+## 14. How the project is organized (folder-by-folder)
 
-Once you're comfortable running the app, here are some beginner-friendly ways to extend it:
+- **`app.py`** - The Flask application. Defines every URL route
+  (`/`, `/api/convert`, `/api/chat`, etc.), validates incoming requests,
+  and calls into the `services/` layer to do the real work. Keep this
+  file focused on "routing" - not business logic.
 
-- Add historical rate charts using a JavaScript charting library.
-- Add more currencies to `services/exchange_service.py`'s `SUPPORTED_CURRENCIES` list.
-- Persist recently used currency pairs using the browser's `localStorage`.
-- Add unit tests for `services/exchange_service.py` using `pytest`.
-- Deploy the app using `gunicorn` (already included in `requirements.txt`) on a platform like Render, Railway, or Fly.io.
+- **`config.py`** - Reads all environment variables (from `.env`) into one
+  `Config` class so the rest of the app never touches `os.environ`
+  directly. Change default models, timeouts, or URLs here.
+
+- **`services/currency_service.py`** - Talks to the currency exchange
+  rate APIs (ExchangeRate-API and/or Frankfurter). Includes a small
+  in-memory cache so repeated requests for the same pair don't hit the
+  external API every time.
+
+- **`services/ai_service.py`** - Talks to OpenAI or Claude. Contains all
+  the prompt templates (`explain_exchange_rate`, `summarize_trend`,
+  `travel_recommendation`, `investment_suggestion`, `compare_currencies`,
+  `chat_reply`). If you want to tweak the AI's tone or add a new AI
+  feature, this is the file to edit.
+
+- **`utils/helpers.py`** - Tiny shared utilities, like the standard JSON
+  success/error response format and basic input validation.
+
+- **`templates/index.html`** - The one and only HTML page. Uses Flask's
+  Jinja templating just to link the CSS/JS files (`url_for`) - everything
+  else is static markup that JavaScript fills in dynamically.
+
+- **`static/css/style.css`** - All visual styling, including CSS custom
+  properties (`:root` and `[data-theme="dark"]`) that power the light and
+  dark themes, plus responsive breakpoints for mobile.
+
+- **`static/js/app.js`** - All frontend behavior: fetching data from the
+  Flask API, rendering the trend chart (hand-drawn inline SVG, no chart
+  library needed), the typing animation for AI text, the chat widget with
+  `localStorage`-backed history, and the dark mode toggle.
+
+- **`requirements.txt`** - Exact list of Python packages + versions this
+  project depends on. `pip install -r requirements.txt` reads this file.
+
+- **`.env` / `.env.example`** - Your secret configuration. `.env.example`
+  is committed to version control as a template; `.env` (your real copy)
+  never is.
 
 ---
 
-**Enjoy building!** If you run into an issue not covered here, re-read the terminal output carefully - Python and Flask error messages usually tell you exactly which line and file caused the problem.
+## 15. API endpoints reference
+
+All endpoints return JSON in the shape `{ "success": true, "data": {...} }`
+or `{ "success": false, "error": "message" }`.
+
+| Method | Route | Purpose |
+|---|---|---|
+| GET | `/` | Renders the frontend page |
+| GET | `/api/currencies` | List of supported currency codes/names |
+| POST | `/api/convert` | Convert an amount + get an AI explanation |
+| POST | `/api/historical` | Get a historical rate series (for the chart) |
+| POST | `/api/trend` | AI-generated summary of the historical trend |
+| POST | `/api/travel-tips` | AI travel money recommendations |
+| POST | `/api/investment-tips` | AI general investment-education perspective |
+| POST | `/api/compare` | Compare multiple currencies against USD |
+| POST | `/api/chat` | Free-form conversational endpoint |
+
+Example request body for `/api/convert`:
+```json
+{ "base": "USD", "target": "EUR", "amount": 100, "include_explanation": true }
+```
+
+---
+
+## 16. Deployment guide
+
+The app is a standard Flask app, so it works on most Python-friendly
+hosts. Below are two common, beginner-friendly options.
+
+### Option A: Render.com (recommended for beginners, free tier available)
+
+1. Push this project to a GitHub repository (create one at github.com,
+   then in your project folder run:
+   ```bash
+   git init
+   git add .
+   git commit -m "Initial commit"
+   git branch -M main
+   git remote add origin <your-repo-url>
+   git push -u origin main
+   ```
+   - remember `.env` is git-ignored, so your secrets stay local).
+2. Go to **https://render.com**, sign up, and click **New -> Web Service**.
+3. Connect your GitHub repo.
+4. Configure:
+   - **Build command:** `pip install -r requirements.txt`
+   - **Start command:** `gunicorn app:app`
+5. Under **Environment Variables**, add every key from your `.env` file
+   (`OPENAI_API_KEY`, `AI_PROVIDER`, `EXCHANGE_RATE_API_KEY`, etc.) - this
+   is the cloud equivalent of your local `.env` file.
+6. Click **Create Web Service**. Render will build and deploy; you'll get
+   a public URL like `https://your-app.onrender.com`.
+
+### Option B: Heroku
+
+1. Install the Heroku CLI and run `heroku login`.
+2. In your project folder:
+   ```bash
+   heroku create your-app-name
+   git push heroku main
+   ```
+3. Set your environment variables:
+   ```bash
+   heroku config:set OPENAI_API_KEY=sk-...
+   heroku config:set AI_PROVIDER=openai
+   heroku config:set EXCHANGE_RATE_API_KEY=...
+   ```
+4. Heroku automatically detects the `Procfile` (`web: gunicorn app:app`)
+   included in this project and starts the app correctly.
+
+### General deployment notes
+
+- Always set `FLASK_DEBUG=False` in production environment variables -
+  debug mode should never be enabled on a public server.
+- Never commit `.env` - always configure secrets through your host's
+  dashboard/CLI (as shown above).
+- The free/hobby tiers of most hosts "sleep" after inactivity, so the
+  first request after idling may take a few seconds to wake up - that's
+  expected behavior, not a bug.
+
+---
+
+## 17. Future improvements
+
+Ideas if you want to keep extending this project:
+
+- **Persist chat history server-side** (e.g. SQLite or Postgres) instead
+  of `localStorage`, so history survives across devices.
+- **Rate charts with more ranges** (7d / 30d / 90d / 1y toggle).
+- **Push notifications / email alerts** when a currency crosses a target
+  rate.
+- **User accounts** so people can save favorite currency pairs.
+- **Streaming AI responses** (token-by-token from the API) instead of the
+  simulated typing animation, for a snappier feel on longer answers.
+- **Automated tests** for `services/currency_service.py` and
+  `services/ai_service.py` using `pytest` and mocked HTTP responses.
+- **Multi-language support** for the AI explanations and UI text.
+- **Currency news feed integration** to ground AI trend commentary in
+  real, cited headlines.
+
+---
+
+## 18. License
+
+This project is provided as-is for educational purposes. Add your own
+license (MIT is a common, permissive choice) if you plan to share or
+publish it.

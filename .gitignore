@@ -1,35 +1,21 @@
-# --- Python ---
-__pycache__/
-*.py[cod]
-*$py.class
-*.so
-.Python
-
-# --- Virtual environments ---
-venv/
-env/
-ENV/
-.venv/
-
-# --- Environment variables (NEVER commit real secrets) ---
+# Environment variables (NEVER commit real secrets)
 .env
 
-# --- Flask ---
-instance/
-.webassets-cache
+# Python
+__pycache__/
+*.pyc
+*.pyo
+.venv/
+venv/
+env/
+*.egg-info/
 
-# --- VS Code ---
+# VS Code
 .vscode/
-*.code-workspace
 
-# --- OS files ---
+# OS files
 .DS_Store
 Thumbs.db
 
-# --- Logs ---
+# Logs
 *.log
-
-# --- Distribution / packaging ---
-build/
-dist/
-*.egg-info/
