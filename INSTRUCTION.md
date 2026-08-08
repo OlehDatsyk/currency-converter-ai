@@ -388,20 +388,20 @@ You should see output similar to:
  * Serving Flask app 'app'
  * Debug mode: on
  * Running on all addresses (0.0.0.0)
- * Running on http://127.0.0.1:5000
+ * Running on http://127.0.0.1:1000
 Press CTRL+C to quit
 ```
 
-The line `Running on http://127.0.0.1:5000` means the app is live on
+The line `Running on http://127.0.0.1:1000` means the app is live on
 your computer.
 
 ---
 
 ## 13. Test that everything works
 
-1. Hold `Ctrl` (or `Cmd` on Mac) and click the `http://127.0.0.1:5000`
+1. Hold `Ctrl` (or `Cmd` on Mac) and click the `http://127.0.0.1:1000`
    link in the terminal, or open your browser and type
-   `http://127.0.0.1:5000` into the address bar yourself.
+   `http://127.0.0.1:1000` into the address bar yourself.
 2. You should see the "Ledger — AI Currency Assistant" page load, with a
    status pill near the top that says **"Connected"** once the currency
    list finishes loading.
@@ -458,8 +458,8 @@ press `Ctrl+C`.
 | `AIServiceError: AI provider request failed: Error code: 401` | Your API key is invalid, mistyped, or has no billing configured. | Re-copy the key carefully (no extra spaces), and check your account's billing status on the provider's website. |
 | Conversion works, but the AI explanation says "unavailable" | The conversion succeeded, but the AI call failed separately. | Check the terminal for the specific error text; double-check your API key and internet connection. |
 | `CurrencyServiceError: Could not fetch...` | The currency API is unreachable or your key is invalid. | Leave `EXCHANGE_RATE_API_KEY` blank to use the free fallback, or verify your key on exchangerate-api.com. |
-| Browser says "This site can't be reached" at `127.0.0.1:5000` | The server isn't running or has crashed. | Check the VS Code terminal for error output; make sure `python app.py` is still running. |
-| Port 5000 already in use | Another program is already using that port. | Close the other program, or open `app.py`, change the last line's `port=5000` to `port=5001`, save, and restart — then visit `http://127.0.0.1:5001` instead. On Mac, this is sometimes caused by AirPlay Receiver — you can disable it in System Settings → General → AirDrop & Handoff. |
+| Browser says "This site can't be reached" at `127.0.0.1:1000` | The server isn't running or has crashed. | Check the VS Code terminal for error output; make sure `python app.py` is still running. |
+| Port 1000 already in use | Another program is already using that port. | Close the other program, or open `app.py`, change the last line's `port=1000` to `port=5001`, save, and restart — then visit `http://127.0.0.1:5001` instead. On Mac, this is sometimes caused by AirPlay Receiver — you can disable it in System Settings → General → AirDrop & Handoff. |
 | CSS/JS changes don't show up in the browser | Your browser cached the old files. | Force a refresh with `Ctrl+Shift+R` (Windows/Linux) or `Cmd+Shift+R` (Mac). |
 
 If you hit an error not listed here, copy the exact error text from the

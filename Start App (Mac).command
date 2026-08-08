@@ -11,9 +11,9 @@
 # it from Finder works no matter where the project folder is.
 cd "$(dirname "$0")" || exit 1
 
-echo "============================================================"
-echo "  Ledger - AI Currency Assistant - Startup"
-echo "============================================================"
+echo "======================================================================"
+echo "  Ledger - AI Currency Assistant - Startup (Was made by Oleh Datsyk)"
+echo "======================================================================"
 echo ""
 
 # ------------------------------------------------------------------
@@ -155,7 +155,7 @@ echo ""
 echo "[6/6] Starting the application..."
 echo ""
 echo "============================================================"
-echo "  Once you see \"Running on http://127.0.0.1:5000\" below,"
+echo "  Once you see \"Running on http://127.0.0.1:1000\" below,"
 echo "  open that address in your web browser to use the app."
 echo "  Press CTRL+C in this window to stop the server."
 echo "============================================================"
