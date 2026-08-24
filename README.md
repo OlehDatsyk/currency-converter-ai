@@ -54,8 +54,8 @@ Browser (HTML/CSS/JS)
         ▼
 Flask app (app.py)
         │
-        ├── services/currency_service.py  ->  Currency exchange rate API
-        └── services/ai_service.py        ->  OpenAI API or Claude API
+        ├── services/currency_service.py -> Currency exchange rate API
+        └── services/ai_service.py -> OpenAI API or Claude API
 ```
 
 ---
@@ -65,33 +65,33 @@ Flask app (app.py)
 ```
 currency-ai-assistant/
 │
-├── app.py                     # Flask entry point - defines all routes
-├── config.py                  # Loads settings & API keys from .env
-├── requirements.txt           # List of Python packages this project needs
-├── .env.example                # Template for your secret keys (copy -> .env)
-├── .env                        # YOUR real secrets (you create this, never commit it)
-├── .gitignore                  # Tells Git which files to ignore (like .env)
-├── Procfile                    # Used by some deployment platforms (Heroku/Render)
-├── README.md                   # This file
+├── app.py # Flask entry point - defines all routes
+├── config.py # Loads settings & API keys from .env
+├── requirements.txt # List of Python packages this project needs
+├── .env.example # Template for your secret keys (copy -> .env)
+├── .env # YOUR real secrets (you create this, never commit it)
+├── .gitignore # Tells Git which files to ignore (like .env)
+├── Procfile # Used by some deployment platforms (Heroku/Render)
+├── README.md # This file
 │
-├── services/                   # "Business logic" - talks to external APIs
+├── services/ # "Business logic" - talks to external APIs
 │   ├── __init__.py
-│   ├── currency_service.py     # Currency conversion + historical rates
-│   └── ai_service.py           # All OpenAI/Claude prompt logic
+│   ├── currency_service.py # Currency conversion + historical rates
+│   └── ai_service.py # All OpenAI/Claude prompt logic
 │
-├── utils/                       # Small reusable helper functions
+├── utils/ # Small reusable helper functions
 │   ├── __init__.py
 │   └── helpers.py
 │
-├── templates/                   # HTML files Flask renders
-│   └── index.html               # The single-page frontend
+├── templates/ # HTML files Flask renders
+│   └── index.html # The single-page frontend
 │
-└── static/                      # CSS, JS, images served as-is
+└── static/ # CSS, JS, images served as-is
     ├── css/
-    │   └── style.css            # All styling (light + dark theme)
+    │   └── style.css # All styling (light + dark theme)
     ├── js/
-    │   └── app.js                # All frontend behavior
-    └── img/                       # (empty - add your own images/icons here)
+    │   └── app.js # All frontend behavior
+    └── img/ # (empty - add your own images/icons here)
 ```
 
 ---
@@ -393,23 +393,23 @@ You should see terminal output similar to this:
  * Debug mode: on
 WARNING: This is a development server. Do not use it in a production deployment.
  * Running on all addresses (0.0.0.0)
- * Running on http://127.0.0.1:1000
- * Running on http://192.168.1.23:1000
+ * Running on http://127.0.0.1:8000
+ * Running on http://192.168.1.23:8000
 Press CTRL+C to quit
  * Restarting with stat
  * Debugger is active!
  * Debugger PIN: 123-456-789
 ```
 
-That `Running on http://127.0.0.1:1000` line is the important one.
+That `Running on http://127.0.0.1:8000` line is the important one.
 
 ---
 
 ## 12. Step 10 - Use the app
 
 1. Hold `Ctrl` (or `Cmd` on Mac) and click the
-   `http://127.0.0.1:1000` link in the terminal - or just open your web
-   browser and manually go to **http://127.0.0.1:1000**.
+   `http://127.0.0.1:8000` link in the terminal - or just open your web
+   browser and manually go to **http://127.0.0.1:8000**.
 2. You should see the "Ledger - AI Currency Assistant" interface load.
 3. Try it out:
    - Enter an amount, pick two currencies, click **Convert**.
@@ -437,8 +437,8 @@ That `Running on http://127.0.0.1:1000` line is the important one.
 | `AIServiceError: AI provider request failed: Error code: 401` | Your API key is invalid, expired, or has no billing set up. | Double-check you copied the whole key with no extra spaces, and that your OpenAI/Anthropic account has billing configured. |
 | Conversion works but "explanation unavailable" / AI sections error out | The currency conversion succeeded but the AI call failed (bad key, no internet, rate limit). | Check the terminal output for the specific error; verify your API key and internet connection. |
 | `CurrencyServiceError: Could not fetch...` | The currency API is unreachable, or your `EXCHANGE_RATE_API_KEY` is invalid. | Leave `EXCHANGE_RATE_API_KEY` blank to use the free Frankfurter fallback, or verify your key at exchangerate-api.com. |
-| Browser shows "This site can't be reached" at 127.0.0.1:1000 | The Flask server isn't running, or it crashed. | Check the VS Code terminal for error text; make sure `python app.py` is still running and didn't exit. |
-| Port `1000` already in use | Another program (or a previous run of this app) is using port 1000. | Stop the other process, or change the port in `app.py`'s last line, e.g. `app.run(port=5001)`, then visit `http://127.0.0.1:5001`. On macOS, AirPlay Receiver sometimes uses 1000 - disable it in System Settings -> General -> AirDrop & Handoff, or just change the port. |
+| Browser shows "This site can't be reached" at 127.0.0.1:8000 | The Flask server isn't running, or it crashed. | Check the VS Code terminal for error text; make sure `python app.py` is still running and didn't exit. |
+| Port `8000` already in use | Another program (or a previous run of this app) is using port 8000. | Stop the other process, or change the port in `app.py`'s last line, e.g. `app.run(port=5001)`, then visit `http://127.0.0.1:5001`. On macOS, AirPlay Receiver sometimes uses 8000 - disable it in System Settings -> General -> AirDrop & Handoff, or just change the port. |
 | Changes to `style.css` / `app.js` don't show up in the browser | Your browser cached the old file. | Hard-refresh with `Ctrl+Shift+R` (Windows/Linux) or `Cmd+Shift+R` (Mac). |
 | `UnicodeDecodeError` or garbled terminal symbols on Windows | Rare console encoding issue. | Run `chcp 65001` in the terminal before starting the app, or use the VS Code integrated terminal instead of an external one. |
 

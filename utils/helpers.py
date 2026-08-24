@@ -19,6 +19,6 @@ def success_response(data, status_code=200):
 
 
 def validate_currency_code(code):
-    """Basic sanity check — real validation happens against the
+    """Basic sanity check - real validation happens against the
     supported-currency list fetched from the API."""
     return isinstance(code, str) and len(code) == 3 and code.isalpha()

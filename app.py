@@ -92,7 +92,7 @@ def convert_currency():
                 base, target, result["rate"], amount, result["converted_amount"]
             )
         except AIServiceError as exc:
-            # Conversion itself still succeeded — just note the AI failure.
+            # Conversion itself still succeeded - just note the AI failure.
             explanation = f"(AI explanation unavailable: {exc})"
 
     result["explanation"] = explanation
@@ -236,4 +236,4 @@ def server_error(_e):
 
 
 if __name__ == "__main__":
-    app.run(debug=Config.DEBUG, host="0.0.0.0", port=1000)
+    app.run(debug=Config.DEBUG, host="0.0.0.0", port=8000)

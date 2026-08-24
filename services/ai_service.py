@@ -2,7 +2,7 @@
 services/ai_service.py
 ------------------------
 All AI/LLM logic lives here. The rest of the app never talks to
-OpenAI or Anthropic directly — it calls methods on `AIService`.
+OpenAI or Anthropic directly - it calls methods on `AIService`.
 
 Why this matters:
 - Keeps prompt engineering in ONE place.
@@ -93,7 +93,7 @@ class AIService:
         "money tips, and general investment ideas in plain English. "
         "You are NOT a licensed financial advisor: always add a brief, "
         "natural disclaimer when giving investment-flavoured suggestions. "
-        "Keep responses tight — use short paragraphs or bullet points, "
+        "Keep responses tight - use short paragraphs or bullet points, "
         "no more than ~150 words unless asked for more detail."
     )
 
